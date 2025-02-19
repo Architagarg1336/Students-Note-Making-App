@@ -15,7 +15,7 @@ struct QuizView: View {
     @State private var shouldDismiss = false
     @Environment(\.colorScheme) private var colorScheme
     
-    // Function to reset the quiz state
+   
     private func resetQuiz() {
         currentQuestionIndex = 0
         score = 0
@@ -24,25 +24,25 @@ struct QuizView: View {
         showingResult = false
     }
     
-    // Generate options code remains unchanged...
+   
     private func generateOptions(for currentCard: Flashcard) -> [String] {
         var options = [currentCard.answer]
         
-        // Try to parse the answer as a number
+    
         if let numericAnswer = Double(currentCard.answer.replacingOccurrences(of: ",", with: "")) {
-            // Generate similar numeric options
+           
             options.append(contentsOf: generateNumericOptions(for: numericAnswer))
         }
-        // Check if the answer is a date
+        
         else if currentCard.answer.contains("/") || currentCard.answer.contains("-") {
             options.append(contentsOf: generateDateOptions(for: currentCard.answer))
         }
-        // Handle string answers
+        
         else {
             options.append(contentsOf: generateStringOptions(for: currentCard))
         }
         
-        // If we still don't have enough options, add from other flashcards
+     
         if options.count < 4 {
             let remainingOptions = flashcards
                 .filter { $0.id != currentCard.id }
@@ -61,29 +61,29 @@ struct QuizView: View {
     private func generateStringOptions(for currentCard: Flashcard) -> [String] {
         let answer = currentCard.answer.lowercased()
         
-        // Get all other string answers from flashcards
+       
         let otherAnswers = flashcards
             .filter { $0.id != currentCard.id }
             .map { $0.answer }
-            .filter { Double($0.replacingOccurrences(of: ",", with: "")) == nil } // Ensure it's not a number
-            .filter { !$0.contains("/") && !$0.contains("-") } // Ensure it's not a date
+            .filter { Double($0.replacingOccurrences(of: ",", with: "")) == nil }
+            .filter { !$0.contains("/") && !$0.contains("-") }
         
-        // Score each answer based on similarity to create more relevant options
+       
         let scoredAnswers = otherAnswers.map { answer -> (String, Int) in
             var score = 0
             let otherAnswer = answer.lowercased()
             
-            // Higher score for similar length
+           
             if abs(answer.count - otherAnswer.count) <= 3 {
                 score += 3
             }
             
-            // Higher score for answers in the same category/context
+           
             if answer.split(separator: " ").first == otherAnswer.split(separator: " ").first {
                 score += 2
             }
             
-            // Higher score for answers with similar words
+         
             let answerWords = Set(answer.split(separator: " "))
             let otherWords = Set(otherAnswer.split(separator: " "))
             let commonWords = answerWords.intersection(otherWords)
@@ -92,7 +92,7 @@ struct QuizView: View {
             return (answer, score)
         }
         
-        // Sort by similarity score and take the top 3
+      
         let similarOptions = scoredAnswers
             .sorted { $0.1 > $1.1 }
             .prefix(3)
@@ -101,31 +101,29 @@ struct QuizView: View {
         return Array(similarOptions)
     }
     
-    // Other helper methods remain unchanged...
+   
     private func generateNumericOptions(for answer: Double) -> [String] {
         var options: [String] = []
         let originalString = currentCard.answer
         
-        // Determine if the original answer is an integer or decimal
+       
         let isInteger = !originalString.contains(".")
         
-        // Determine the magnitude of the number
+        
         let magnitude = pow(10, floor(log10(abs(answer))))
         
-        // Generate variations based on the number type
         var variations: [Double] = []
         if isInteger {
-            // For integers, generate whole number variations
             variations = [
-                round(answer * 0.9),    // 90% rounded
-                round(answer * 1.1),    // 110% rounded
-                answer + magnitude,      // Add magnitude
-                answer - magnitude,      // Subtract magnitude
-                round(answer * 2),      // Double
-                round(answer / 2)       // Half
+                round(answer * 0.9),
+                round(answer * 1.1),
+                answer + magnitude,
+                answer - magnitude,
+                round(answer * 2),
+                round(answer / 2)
             ]
         } else {
-            // For decimals, keep decimal variations
+         
             let decimalPlaces = originalString.split(separator: ".").last?.count ?? 2
             let multiplier = pow(10.0, Double(decimalPlaces))
             
@@ -139,7 +137,7 @@ struct QuizView: View {
             ]
         }
         
-        // Format numbers based on the original format
+
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         
@@ -152,28 +150,28 @@ struct QuizView: View {
             formatter.minimumFractionDigits = decimalPlaces
         }
         
-        // Add formatted variations
+       
         options = variations
-            .map { abs($0) } // Ensure positive numbers
-            .filter { $0 != answer } // Remove the correct answer if it appears in variations
+            .map { abs($0) }
+            .filter { $0 != answer }
             .compactMap { formatter.string(from: NSNumber(value: $0)) ?? "" }
         
-        // Remove duplicates and ensure they're different from the original answer
+       
         options = Array(Set(options)).filter { $0 != originalString }
         
-        // Shuffle and take only what we need
+      
         return Array(options.prefix(3))
     }
     
     private func generateDateOptions(for answer: String) -> [String] {
         var options: [String] = []
         
-        // Try to parse the date
+       
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = answer.contains("/") ? "MM/dd/yyyy" : "yyyy-MM-dd"
         
         if let date = dateFormatter.date(from: answer) {
-            // Generate dates around the correct answer
+           
             let calendar = Calendar.current
             let variations: [Date] = [
                 calendar.date(byAdding: .day, value: 1, to: date)!,
@@ -184,7 +182,7 @@ struct QuizView: View {
                 calendar.date(byAdding: .year, value: -1, to: date)!
             ]
             
-            // Format dates in the same format as the answer
+         
             options = variations.map { dateFormatter.string(from: $0) }
         }
         
@@ -192,7 +190,7 @@ struct QuizView: View {
     }
     
     private func isAnswerSimilarType(_ answer: String, to reference: String) -> Bool {
-        // Helper function to check if two answers are of similar type
+       
         let isReferenceNumeric = Double(reference.replacingOccurrences(of: ",", with: "")) != nil
         let isAnswerNumeric = Double(answer.replacingOccurrences(of: ",", with: "")) != nil
         
@@ -223,9 +221,7 @@ struct QuizView: View {
                     .ignoresSafeArea()
                 
                 VStack(spacing: 20) {
-                    // Progress and Score Bar
                     HStack(spacing: 12) {
-                        // Progress bar
                         ZStack(alignment: .leading) {
                             Capsule()
                                 .fill(Color.secondary.opacity(0.2))
@@ -243,7 +239,6 @@ struct QuizView: View {
                                 .animation(.easeInOut(duration: 0.5), value: animateProgress)
                         }
                         
-                        // Score Chip
                         HStack(spacing: 4) {
                             Image(systemName: "star.fill")
                                 .font(.caption)
@@ -264,19 +259,16 @@ struct QuizView: View {
                     .padding(.horizontal)
                     .padding(.top)
                     
-                    // Question Counter
                     Text("Question \(currentQuestionIndex + 1) of \(flashcards.count)")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                     
-                    // Question Card - No 3D rotation effect
                     ZStack {
                         RoundedRectangle(cornerRadius: 20)
                             .fill(colorScheme == .dark ? Color(.systemGray6) : Color.white)
                             .shadow(color: .black.opacity(0.1), radius: 15, x: 0, y: 5)
                         
                         VStack(alignment: .leading, spacing: 20) {
-                            // Question Header
                             HStack {
                                 Text("Question:")
                                     .font(.headline)
@@ -292,7 +284,6 @@ struct QuizView: View {
                                 }
                             }
                             
-                            // Question Text
                             Text(currentCard.question)
                                 .font(.system(.title3, design: .rounded))
                                 .fontWeight(.medium)
@@ -306,7 +297,6 @@ struct QuizView: View {
                     .frame(height: 150)
                     .padding(.horizontal)
                     
-                    // Answer Options
                     VStack(spacing: 12) {
                         ForEach(options, id: \.self) { option in
                             Button(action: {
@@ -339,7 +329,6 @@ struct QuizView: View {
                     
                     Spacer()
                     
-                    // Next Button
                     if showingAnswer {
                         Button(action: nextQuestion) {
                             HStack {
@@ -402,8 +391,8 @@ struct QuizView: View {
         }
         .fullScreenCover(isPresented: $showingResult) {
             QuizResultView(score: score, totalQuestions: flashcards.count, onTryAgain: {
-                resetQuiz() // Reset the quiz state when "Try Again" is pressed
-                showingResult = false // Dismiss the result view
+                resetQuiz()
+                showingResult = false
             })
         }
         .onChange(of: shouldDismiss) { newValue in
@@ -415,14 +404,12 @@ struct QuizView: View {
             shouldDismiss = true
         }
         .onAppear {
-            // Initialize animations
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                 animateProgress = true
             }
         }
     }
     
-    // Enhanced styling methods for better visual feedback
     
     private func backgroundGradient(for option: String) -> LinearGradient {
         if !showingAnswer {

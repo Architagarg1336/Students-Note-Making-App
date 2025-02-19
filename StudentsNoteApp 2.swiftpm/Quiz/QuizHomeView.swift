@@ -42,7 +42,7 @@ struct QuizHomeView: View {
     var body: some View {
         NavigationView {
             List {
-                // Quick Start Section
+              
                 Section(header: Text("Quick Start")) {
                     Button(action: {
                         resetFilters()
@@ -61,7 +61,7 @@ struct QuizHomeView: View {
                     .disabled(flashcardViewModel.flashcards.isEmpty)
                 }
                 
-                // Quiz by Subject
+          
                 if !availableSubjects.isEmpty {
                     Section(header: Text("Quiz by Subject")) {
                         ForEach(availableSubjects, id: \.self) { subject in
@@ -70,7 +70,7 @@ struct QuizHomeView: View {
                                 resetFilters()
                                 selectedQuizType = .bySubject
                                 selectedSubject = subject
-                                // Ensure state is updated before showing the quiz
+                               
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                                     showingQuiz = true
                                 }
@@ -89,7 +89,7 @@ struct QuizHomeView: View {
                     }
                 }
                 
-                // Quiz by Difficulty
+             
                 Section(header: Text("Quiz by Difficulty")) {
                     ForEach(Flashcard.Difficulty.allCases, id: \.self) { difficulty in
                         let cards = flashcardViewModel.flashcards.filter { $0.difficulty == difficulty }
@@ -97,7 +97,7 @@ struct QuizHomeView: View {
                             resetFilters()
                             selectedQuizType = .byDifficulty
                             selectedDifficulty = difficulty
-                            // Ensure state is updated before showing the quiz
+                          
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                                 showingQuiz = true
                             }
@@ -115,7 +115,7 @@ struct QuizHomeView: View {
                     }
                 }
                 
-                // Statistics Section
+               
                 Section(header: Text("Statistics")) {
                     HStack {
                         Text("Total Flashcards")
@@ -134,7 +134,7 @@ struct QuizHomeView: View {
             }
             .navigationTitle("Quiz")
             .fullScreenCover(isPresented: $showingQuiz, onDismiss: {
-                resetFilters() // Reset filters when quiz is dismissed
+                resetFilters()
             }) {
                 QuizView(flashcards: getFilteredFlashcards(), viewModel: flashcardViewModel)
             }

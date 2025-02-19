@@ -17,7 +17,6 @@ struct CardContentView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
-            // Header
             HStack {
                 Text(title)
                     .font(.subheadline.weight(.semibold))
@@ -39,7 +38,7 @@ struct CardContentView: View {
                 }
             }
             
-            // Main content
+           
             ScrollView {
                 Text(content)
                     .font(.system(.title3, design: .rounded))
@@ -53,7 +52,7 @@ struct CardContentView: View {
             
             Spacer()
             
-            // Bottom metadata
+          
             VStack(alignment: .leading, spacing: 8) {
                 HStack {
                     Image(systemName: "folder.fill")

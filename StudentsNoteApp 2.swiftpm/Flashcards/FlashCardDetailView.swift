@@ -1,6 +1,6 @@
 import SwiftUI
 
-// MARK: - FlashcardDetailView
+
 struct FlashcardDetailView: View {
     let flashcard: Flashcard
     @ObservedObject var viewModel: FlashcardViewModel
@@ -10,15 +10,15 @@ struct FlashcardDetailView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
-                // Card View
+               
                 cardView
                     .frame(height: 300)
                     .padding(.horizontal)
                 
-                // Statistics Section
+                
                 statisticsSection
                 
-                // Actions Section
+              
                 actionsSection
             }
             .padding(.vertical)
@@ -29,7 +29,7 @@ struct FlashcardDetailView: View {
     
     private var cardView: some View {
         ZStack {
-            // Front of the card
+           
             if !isFlipped {
                 RoundedRectangle(cornerRadius: 20)
                     .fill(colorScheme == .dark ? Color(.systemGray6) : .white)
@@ -48,7 +48,7 @@ struct FlashcardDetailView: View {
                 }
             }
             
-            // Back of the card
+           
             if isFlipped {
                 RoundedRectangle(cornerRadius: 20)
                     .fill(colorScheme == .dark ? Color(.systemGray6) : .white)

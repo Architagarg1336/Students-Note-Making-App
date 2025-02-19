@@ -1,12 +1,8 @@
-//
-//  NoteDetailView.swift
-//  StudentsNoteApp
-//
-//  Created by Archita Garg on 02/02/25.
-//
 
 
-// File: NoteDetailView.swift
+
+
+
 import SwiftUI
 
 struct NoteDetailView: View {

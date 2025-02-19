@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct StudyModeView: View {
-    // MARK: - Properties
+   
     let flashcards: [Flashcard]
     @ObservedObject var viewModel: FlashcardViewModel
     @State private var currentIndex = 0
@@ -12,22 +12,21 @@ struct StudyModeView: View {
     
     var body: some View {
         ZStack {
-            // Background
+           
             Color(.systemGroupedBackground)
                 .ignoresSafeArea()
             
             VStack(spacing: 20) {
-                // Progress bar and counter
+                
                 progressHeader
                 
                 Spacer()
-                
-                // Flashcard
+              
                 cardStack
                 
                 Spacer()
                 
-                // Control buttons
+               
                 controlButtons
             }
         }
@@ -40,7 +39,6 @@ struct StudyModeView: View {
         }
     }
     
-    // MARK: - View Components
     private var progressHeader: some View {
         HStack(spacing: 15) {
             ProgressView(value: Double(currentIndex + 1), total: Double(flashcards.count))
@@ -63,7 +61,7 @@ struct StudyModeView: View {
     
     private var cardStack: some View {
         ZStack {
-            // Front of card (Question)
+           
             ZStack {
                 cardBackground
                 
@@ -78,7 +76,7 @@ struct StudyModeView: View {
             .opacity(isFlipped ? 0 : 1)
             .rotation3DEffect(.degrees(isFlipped ? 180 : 0), axis: (x: 0, y: 1, z: 0))
             
-            // Back of card (Answer)
+           
             ZStack {
                 cardBackground
                 
@@ -125,7 +123,7 @@ struct StudyModeView: View {
         .padding(.horizontal)
     }
     
-    // MARK: - Control Buttons
+   
     private var previousButton: some View {
         Button(action: { previousCard() }) {
             Image(systemName: "arrow.left")
@@ -179,7 +177,7 @@ struct StudyModeView: View {
         .disabled(currentIndex == flashcards.count - 1)
     }
     
-    // MARK: - Helper Methods
+   
     private func flipCard() {
         withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
             isFlipped.toggle()

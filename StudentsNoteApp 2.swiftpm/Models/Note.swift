@@ -46,7 +46,7 @@ class NoteViewModel: ObservableObject {
         loadNotes()
     }
     
-    // MARK: - Note Management
+  
     
     func addNote(title: String, content: String, mainTopic: String, subTopic: String) {
         let note = Note(title: title, content: content, mainTopic: mainTopic, subTopic: subTopic)
@@ -59,7 +59,7 @@ class NoteViewModel: ObservableObject {
         let fileType: Note.NoteFileType
         var content = ""
         
-        // Determine file type and read content
+       
         switch fileURL.pathExtension.lowercased() {
         case "txt":
             fileType = .text
@@ -67,14 +67,14 @@ class NoteViewModel: ObservableObject {
             
         case "pdf":
             fileType = .pdf
-            // Here you would implement PDF reading logic
+          
             content = "PDF Document"
             
         default:
             throw NSError(domain: "NoteError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Unsupported file type"])
         }
         
-        // Create local copy of the file
+     
         let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let savedFileURL = documentsDirectory.appendingPathComponent(fileURL.lastPathComponent)
         
@@ -108,7 +108,7 @@ class NoteViewModel: ObservableObject {
         saveNotes()
     }
     
-    // MARK: - Topic Management
+ 
     
     private func updateMainTopics() {
         mainTopics = Set(notes.map { $0.mainTopic })
@@ -129,7 +129,7 @@ class NoteViewModel: ObservableObject {
         return notes.filter { $0.mainTopic == mainTopic }
     }
     
-    // MARK: - Persistence
+    
     
     private func saveNotes() {
         let encoder = JSONEncoder()
@@ -148,7 +148,7 @@ class NoteViewModel: ObservableObject {
         }
     }
     
-    // MARK: - Search and Filter
+
     
     func searchNotes(query: String) -> [Note] {
         guard !query.isEmpty else { return notes }

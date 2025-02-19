@@ -37,7 +37,7 @@ struct FilteredFlashcardListView: View {
     var body: some View {
         NavigationView {
             VStack {
-                // Search and Filter Bar
+              
                 VStack(spacing: 8) {
                     SearchBar(text: $searchText)
                     

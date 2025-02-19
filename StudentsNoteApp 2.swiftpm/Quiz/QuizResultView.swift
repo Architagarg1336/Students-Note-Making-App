@@ -58,7 +58,7 @@ struct QuizResultView: View {
                     .ignoresSafeArea()
                 
                 VStack(spacing: 30) {
-                    // Score Display with circular progress
+                  
                     VStack(spacing: 15) {
                         Text("Quiz Complete!")
                             .font(.title)
@@ -99,7 +99,7 @@ struct QuizResultView: View {
                         .padding(.bottom, 10)
                     }
                     
-                    // Result Message
+                   
                     Text(resultMessage)
                         .font(.headline)
                         .multilineTextAlignment(.center)
@@ -117,7 +117,7 @@ struct QuizResultView: View {
                     
                     Spacer()
                     
-                    // Action Buttons
+                   
                     VStack(spacing: 15) {
                         Button(action: {
                             onTryAgain()
@@ -164,7 +164,7 @@ struct QuizResultView: View {
                                 .foregroundColor(.secondary)
                                 .contentTransition(.symbolEffect(.replace))
                         } else {
-                            // Fallback on earlier versions
+                           
                         }
                     }
                 }

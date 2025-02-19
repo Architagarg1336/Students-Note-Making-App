@@ -12,8 +12,6 @@ class FlashcardViewModel: ObservableObject {
        
     }
     
-  
-    
     func addFlashcard(_ flashcard: Flashcard) {
         flashcards.append(flashcard)
         saveFlashcards()
@@ -49,7 +47,6 @@ class FlashcardViewModel: ObservableObject {
         return flashcards.filter { $0.isMarkedForReview }
     }
     
-    // MARK: - Mark/Unmark for Review
     
     func markFlashcardForReview(_ flashcard: Flashcard) {
         if let index = flashcards.firstIndex(where: { $0.id == flashcard.id }) {
@@ -65,7 +62,6 @@ class FlashcardViewModel: ObservableObject {
         }
     }
     
-    // MARK: - Spaced Repetition (SM-2 Algorithm)
     
     func scheduleNextReview(for flashcard: Flashcard, performance: Int) {
         var updatedFlashcard = flashcard
@@ -102,7 +98,6 @@ class FlashcardViewModel: ObservableObject {
         saveProgress()
     }
     
-    // MARK: - Progress Tracking
     
     private func saveProgress() {
         let progressData = [
